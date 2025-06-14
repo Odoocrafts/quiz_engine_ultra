@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu items -->
+    <menuitem id="menu_quiz_engine_root"
+              name="Quiz Engine"
+              sequence="50"/>
+
+    <menuitem id="menu_quiz_management"
+              name="Quizzes"
+              parent="menu_quiz_engine_root"
+              sequence="10"/>
+
+    <menuitem id="menu_quiz"
+              name="Quizzes"
+              parent="menu_quiz_management"
+              action="action_quiz"
+              sequence="10"/>
+
+    <menuitem id="menu_question"
+              name="Questions"
+              parent="menu_quiz_management"
+              action="action_question"
+              sequence="20"/>
+
+    <!-- Actions -->
+    <record id="action_quiz" model="ir.actions.act_window">
+        <field name="name">Quizzes</field>
+        <field name="res_model">quiz.quiz</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Quiz!
+            </p>
+            <p>
+                Create quizzes with different question types
+                and share with your users.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_question" model="ir.actions.act_window">
+        <field name="name">Questions</field>
+        <field name="res_model">quiz.question</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first question!
+            </p>
+            <p>
+                Questions are added to quizzes and can have
+                multiple answer options.
+            </p>
+        </field>
+    </record>
+</odoo>

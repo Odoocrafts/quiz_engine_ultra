@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Quiz tree view -->
+    <record id="view_quiz_tree" model="ir.ui.view">
+        <field name="name">quiz.quiz.tree</field>
+        <field name="model">quiz.quiz</field>
+        <field name="arch" type="xml">
+            <tree string="Quizzes">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="attempts_allowed"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Quiz form view -->
+    <record id="view_quiz_form" model="ir.ui.view">
+        <field name="name">quiz.quiz.form</field>
+        <field name="model">quiz.quiz</field>
+        <field name="arch" type="xml">
+            <form string="Quiz">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Quiz Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="attempts_allowed"/>
+                            <field name="timer_type" widget="radio"/>
+                            <field name="global_time_limit" attrs="{'invisible': [('timer_type', '!=', 'global')], 'required': [('timer_type', '=', 'global')]}"
+                                   options="{'tooltip': 'Total time allowed for the entire quiz (in minutes)'}" />
+                            <field name="per_question_time" attrs="{'invisible': [('timer_type', '!=', 'per_question')], 'required': [('timer_type', '=', 'per_question')]}"
+                                   options="{'tooltip': 'Time allowed for each question (in seconds)'}" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe your quiz here..."/>
+                        </page>
+                        <page string="Instructions">
+                            <field name="instruction_text" placeholder="Enter instructions to show before the quiz begins..." options="{'collaborative': true, 'resizable': true}"/>
+                        </page>
+                        <page string="Questions">
+                            <field name="question_ids" context="{'default_quiz_id': active_id}">
+                                <tree string="Questions" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="question_type"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Question tree view -->
+    <record id="view_quiz_question_tree" model="ir.ui.view">
+        <field name="name">quiz.question.tree</field>
+        <field name="model">quiz.question</field>
+        <field name="arch" type="xml">
+            <tree string="Questions">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="question_type"/>
+                <field name="quiz_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Question form view -->
+    <record id="view_quiz_question_form" model="ir.ui.view">
+        <field name="name">quiz.question.form</field>
+        <field name="model">quiz.question</field>
+        <field name="arch" type="xml">
+            <form string="Question">
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Question Title"/>
+                        <field name="quiz_id"/>
+                        <field name="question_type"/>
+                        <field name="sequence"/>
+                    </group>
+                    <group>
+                        <field name="question_text" placeholder="Enter question details..." options="{'collaborative': true, 'resizable': true}"/>
+                    </group>
+                    <notebook>
+                        <page string="Answers" attrs="{'invisible': [('question_type', '=', 'text')]}">
+                            <field name="answer_ids" context="{'default_question_id': active_id}">
+                                <tree string="Answers" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="answer_text"/>
+                                    <field name="is_correct"/>
+                                    <field name="score" attrs="{'invisible': [('is_correct', '=', False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Answer tree view -->
+    <record id="view_quiz_answer_tree" model="ir.ui.view">
+        <field name="name">quiz.answer.tree</field>
+        <field name="model">quiz.answer</field>
+        <field name="arch" type="xml">
+            <tree string="Answers">
+                <field name="sequence" widget="handle"/>
+                <field name="answer_text"/>
+                <field name="is_correct"/>
+                <field name="score"/>
+                <field name="question_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Answer form view -->
+    <record id="view_quiz_answer_form" model="ir.ui.view">
+        <field name="name">quiz.answer.form</field>
+        <field name="model">quiz.answer</field>
+        <field name="arch" type="xml">
+            <form string="Answer">
+                <sheet>
+                    <group>
+                        <field name="question_id"/>
+                        <field name="answer_text"/>
+                        <field name="is_correct"/>
+                        <field name="score" attrs="{'invisible': [('is_correct', '=', False)]}"/>
+                        <field name="sequence"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
